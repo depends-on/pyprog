@@ -1,5 +1,7 @@
 import sys
 
-print("Hello, world!", file=sys.stderr)
+import lib
+
+print(lib.message("World"), file=sys.stderr)
 
 # prog.py ends here
