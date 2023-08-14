@@ -1,0 +1,52 @@
+---
+
+name: Build and test a PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Clone extra repos
+        run: |
+          set -ex
+          mkdir path
+          cd path
+          git clone --depth=1 "https://softwarefactory-project.io/r/dci-openshift-agent"
+          git clone --depth=1 https://gitlab.com/adblockinc/ext/adblockplus/spec.git
+          pwd
+          ls -l
+
+      - name: Extract dependent PR
+        uses: depends-on/depends-on-action@extra-dirs
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          extra-dirs: pyprog/path/dci-openshift-agent pyprog/path/spec
+
+      - name: Run build and test
+        run: |
+          set -e
+          python3 -m venv .venv
+          . .venv/bin/activate
+          set -x
+          pip install -r requirements.txt
+          python3 prog.py
+
+  check-all-dependencies-are-merged:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Extract dependent PR
+        uses: depends-on/depends-on-action@extra-dirs
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          check-unmerged-pr: true
+
+...
