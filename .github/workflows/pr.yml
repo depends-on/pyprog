@@ -15,18 +15,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Extract dependent PR
-        uses: depends-on/depends-on-action@refactor-stage1-python
+        uses: depends-on/depends-on-action@container
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run build and test
         run: |
-          set -e
-          python3 -m venv .venv
-          . .venv/bin/activate
-          set -x
-          pip install -r requirements.txt
-          python3 prog.py
+          set -ex
+          docker build -t pyprog:latest .
+          docker run pyprog:latest
 
   check-all-dependencies-are-merged:
     runs-on: ubuntu-latest
@@ -36,7 +33,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Extract dependent PR
-        uses: depends-on/depends-on-action@refactor-stage1-python
+        uses: depends-on/depends-on-action@container
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           check-unmerged-pr: true
