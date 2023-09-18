@@ -4,8 +4,8 @@ LABEL name="pyprog"
 
 WORKDIR /usr/src
 
-COPY prog.py pyproject.toml ./
+COPY prog.py requirements.txt ./
 
-RUN set -x && curl -sSL https://install.python-poetry.org | python3 - && export PATH="/root/.local/bin:$PATH" && poetry install
+RUN set -x && python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt
 
-CMD [ "/root/.local/bin/poetry", "run", "python3", "./prog.py"]
+CMD [ "/usr/src/.venv/bin/python3", "./prog.py"]

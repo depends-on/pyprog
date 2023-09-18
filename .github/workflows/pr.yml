@@ -11,10 +11,10 @@ jobs:
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Extract dependent PR
-        uses: depends-on/depends-on-action@subdir-container
+        uses: depends-on/depends-on-action@pkg
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -29,10 +29,10 @@ jobs:
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Extract dependent PR
-        uses: depends-on/depends-on-action@subdir-container
+        uses: depends-on/depends-on-action@pkg
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           check-unmerged-pr: true
