@@ -1,0 +1,40 @@
+---
+
+name: Build and test a PR
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract dependent PR
+        uses: depends-on/depends-on-action@pkg
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run build and test
+        run: |
+          set -e
+          docker build -t pyprog:latest .
+          docker run pyprog:latest
+
+  check-all-dependencies-are-merged:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract dependent PR
+        uses: depends-on/depends-on-action@pkg
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          check-unmerged-pr: true
+
+...
