@@ -1,5 +1,5 @@
 import sys
 
-print("Hello, world!", file=sys.stderr)
+print("Hello, cruel world!", file=sys.stderr)
 
 # prog.py ends here
